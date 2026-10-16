@@ -403,9 +403,12 @@ const members = [
  {id:'zdenek-snitil',name:'Zdeněk Snítil',initials:'ZS',dogs:[]},
  {id:'karel-vadlejch',name:'Karel Vadlejch',initials:'KV',dogs:[]},
  {id:'pavel-kubinec',name:'Pavel Kubinec',initials:'PK',dogs:[
-   {name:'Kim Moravia Boxrott',sub:'',tests:[]},
-   {name:'Niko Červený mesiac',sub:'',tests:[]},
+   {name:'Kim Moravia Boxrott',sub:'',tests:['ZM','ZVV1','IFH2','IGP3']},
+   {name:'Niko Červený mesiac',sub:'',tests:['ZVV1','IFH2','IGP3']},
    {name:'Sato Moravia Boxrott',sub:'',tests:[]}
+ ]},
+ {id:'milos-cerny',name:'Miloš Černý',initials:'MČ',dogs:[
+   {name:'Adam z Plačického dvora',sub:'',tests:['ZVV1','BH','IGP3'],show:'Výborný'}
  ]}
 ];
 let selected=members[0].id;
@@ -414,12 +417,12 @@ const detail=document.querySelector('#memberDetail');
 const search=document.querySelector('#memberSearch');
 function renderMembers(){
   const q=(search.value||'').toLocaleLowerCase('cs-CZ').trim();
-  const subset=members.filter(m=>(`${m.name} ${m.dogs.map(d=>d.name+' '+d.tests.join(' ')).join(' ')}`).toLocaleLowerCase('cs-CZ').includes(q));
+  const subset=members.filter(m=>(`${m.name} ${m.dogs.map(d=>d.name+' '+d.tests.join(' ')+' '+(d.show?'Výstava '+d.show:'')).join(' ')}`).toLocaleLowerCase('cs-CZ').includes(q));
   if(subset.length&&!subset.some(m=>m.id===selected))selected=subset[0].id;
   membersGrid.innerHTML=subset.length?subset.map(m=>`<button type="button" class="member-card ${selected===m.id?'selected':''}" data-member="${m.id}" aria-pressed="${selected===m.id}"><span class="member-top"><span class="member-avatar">${m.initials}</span><span><span class="member-name">${m.name}</span><small class="member-subtitle">Člen ZKO Ústí nad Orlicí</small></span></span><span class="member-dogs"><span>${m.dogs.length?m.dogs.map(d=>d.name).join(' · '):'Profily psů a výsledky doplníme'}</span></span><span class="member-bottom"><span>Zobrazit profil</span><span>↗</span></span></button>`).join(''):'<div class="empty-members">Žádný člen neodpovídá hledání.</div>';
   if(!subset.length){detail.innerHTML='';return}
   const m=subset.find(m=>m.id===selected)||subset[0];
-  const records=m.dogs.length?`<div class="dog-records">${m.dogs.map(d=>`<div class="dog-record">${d.image?`<img src="${d.image}" alt="Fotografie psa ${d.name}"/>`:''}<div><h4>${d.name}</h4>${d.sub?`<span class="breed">${d.sub}</span>`:''}${d.tests.length?`<div class="exam-list">${d.tests.map(t=>`<span class="exam-pill">${t}</span>`).join('')}</div>`:''}</div></div>`).join('')}</div>`:'<div class="member-empty-profile"><span class="empty-profile-icon">＋</span><div><strong>Profil připraven k doplnění</strong><p>Sem doplníme psy tohoto člena, jejich fotografie, složené zkoušky a sportovní výsledky. Zatím nezobrazujeme žádné neověřené údaje.</p></div></div>';
+  const records=m.dogs.length?`<div class="dog-records">${m.dogs.map(d=>`<div class="dog-record">${d.image?`<img src="${d.image}" alt="Fotografie psa ${d.name}"/>`:''}<div><h4>${d.name}</h4>${d.sub?`<span class="breed">${d.sub}</span>`:''}${d.tests.length||d.show?`<div class="exam-list">${d.tests.map(t=>`<span class="exam-pill">${t}</span>`).join('')}${d.show?`<span class="exam-pill">Výstava: ${d.show}</span>`:''}</div>`:''}</div></div>`).join('')}</div>`:'<div class="member-empty-profile"><span class="empty-profile-icon">＋</span><div><strong>Profil připraven k doplnění</strong><p>Sem doplníme psy tohoto člena, jejich fotografie, složené zkoušky a sportovní výsledky. Zatím nezobrazujeme žádné neověřené údaje.</p></div></div>';
   detail.innerHTML=`<div class="member-detail-header"><div class="member-avatar">${m.initials}</div><div><h3>${m.name}</h3><p>Profil člena ZKO Ústí nad Orlicí</p></div><span class="detail-meta">PSI A ZKOUŠKY</span></div>${records}`;
 }
 membersGrid.addEventListener('click',e=>{const card=e.target.closest('[data-member]');if(card){selected=card.dataset.member;renderMembers();}});
