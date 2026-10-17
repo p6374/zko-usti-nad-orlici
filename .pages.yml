@@ -1,0 +1,133 @@
+media:
+  input: media
+  output: /media
+  rename: safe
+content:
+  - name: texty
+    label: "Texty na webu"
+    type: file
+    path: data/texty.json
+    format: json
+    fields:
+      - name: polozky
+        label: "Texty jednotlivých částí webu"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{popis}"
+        fields:
+          - name: popis
+            label: "Kde je text"
+            type: string
+            readonly: true
+          - name: puvodni
+            label: "Původní text (neměnit)"
+            type: text
+            readonly: true
+          - name: nove
+            label: "Znění na webu – tady upravte text"
+            type: text
+  - name: fotky
+    label: "Fotografie"
+    type: file
+    path: data/fotky.json
+    format: json
+    fields:
+      - name: uvod
+        label: "Úvodní fotografie"
+        type: image
+      - name: kurzy
+        label: "Společná fotografie psů u kurzů"
+        type: image
+      - name: onas
+        label: "Fotografie O nás"
+        type: image
+      - name: galerie1
+        label: "Galerie foto 1"
+        type: image
+      - name: galerie2
+        label: "Galerie foto 2"
+        type: image
+      - name: galerie3
+        label: "Galerie foto 3"
+        type: image
+      - name: galerie4
+        label: "Galerie foto 4"
+        type: image
+      - name: galerie5
+        label: "Galerie foto 5"
+        type: image
+  - name: aktuality
+    label: "Aktuality a akce"
+    type: file
+    path: data/aktuality.json
+    format: json
+    fields:
+      - name: prispevky
+        label: "Příspěvky"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{nadpis}"
+        fields:
+          - name: nadpis
+            label: "Nadpis"
+            type: string
+          - name: datum
+            label: "Datum"
+            type: date
+          - name: kategorie
+            label: "Kategorie"
+            type: string
+          - name: text
+            label: "Text"
+            type: text
+          - name: fotografie
+            label: "Fotografie"
+            type: image
+  - name: clenove
+    label: "Členové a jejich psi"
+    type: file
+    path: data/clenove.json
+    format: json
+    fields:
+      - name: clenove
+        label: "Seznam členů"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{jmeno}"
+        fields:
+          - name: id
+            label: "Identifikátor – neměnit"
+            type: string
+            readonly: true
+          - name: jmeno
+            label: "Jméno"
+            type: string
+          - name: psi
+            label: "Psi"
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{jmeno}"
+            fields:
+              - name: jmeno
+                label: "Jméno psa"
+                type: string
+              - name: zkousky
+                label: "Zkoušky (oddělit čárkami)"
+                type: string
+              - name: vystavy
+                label: "Výstavy a ocenění"
+                type: string
+              - name: fotografie
+                label: "Fotografie psa"
+                type: image
+settings:
+  commit:
+    identity: app
