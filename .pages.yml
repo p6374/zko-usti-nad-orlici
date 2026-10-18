@@ -1,0 +1,28 @@
+media:
+  input: media
+  output: /media
+content:
+  - name: website
+    label: Texty webu ZKO
+    type: file
+    path: content/texty.json
+    format: json
+    fields:
+      - name: items
+        label: Upravit texty na webu
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{original}"
+        fields:
+          - name: id
+            type: string
+            hidden: true
+          - name: original
+            label: Původní text (neměnit)
+            type: string
+            readonly: true
+          - name: text
+            label: Nový text
+            type: text
