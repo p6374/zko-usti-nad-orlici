@@ -7,7 +7,7 @@ export async function onRequest(context) {
   if (!response.ok || !(response.headers.get("content-type") || "").includes("text/html")) return response;
   return new HTMLRewriter().on("head", {
     element(head) {
-      head.append('<script defer src="/cms-runtime.js"></script>', {html:true});
+      head.append('<script defer src="/cms-runtime.js"></script><script defer src="/cms-members.js"></script>', {html:true});
     }
   }).transform(response);
 }
