@@ -1,6 +1,7 @@
 media:
   input: media
   output: /media
+  rename: safe
 content:
   - name: website
     label: Texty webu ZKO
@@ -20,9 +21,39 @@ content:
             type: string
             hidden: true
           - name: original
-            label: Původní text (neměnit)
+            label: Původní text – neměnit
             type: string
             readonly: true
           - name: text
             label: Nový text
             type: text
+  - name: photos
+    label: Fotografie webu ZKO
+    type: file
+    path: content/fotky.json
+    format: json
+    fields:
+      - name: uvod
+        label: Úvodní fotografie
+        type: image
+      - name: kurzy
+        label: Fotografie výcvikových kurzů
+        type: image
+      - name: onas
+        label: Fotografie v sekci O nás
+        type: image
+      - name: galerie1
+        label: Galerie 1
+        type: image
+      - name: galerie2
+        label: Galerie 2
+        type: image
+      - name: galerie3
+        label: Galerie 3
+        type: image
+      - name: galerie4
+        label: Galerie 4
+        type: image
+      - name: galerie5
+        label: Galerie 5
+        type: image
