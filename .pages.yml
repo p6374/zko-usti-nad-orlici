@@ -57,7 +57,7 @@ content:
       - name: galerie5
         label: Galerie 5
         type: image
-- name: clenove
+  - name: clenove
     label: "Členové a psi"
     type: file
     path: content/clenove.json
