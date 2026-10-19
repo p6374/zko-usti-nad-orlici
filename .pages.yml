@@ -57,3 +57,43 @@ content:
       - name: galerie5
         label: Galerie 5
         type: image
+- name: clenove
+    label: "Členové a psi"
+    type: file
+    path: content/clenove.json
+    format: json
+    fields:
+      - name: clenove
+        label: "Seznam členů ZKO"
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{jmeno}"
+        fields:
+          - name: jmeno
+            label: "Jméno a příjmení člena"
+            type: string
+          - name: psi
+            label: "Psi tohoto člena"
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: "{jmeno}"
+            fields:
+              - name: jmeno
+                label: "Jméno psa"
+                type: string
+              - name: plemeno
+                label: "Plemeno / doplňující údaje"
+                type: string
+              - name: zkousky
+                label: "Zkoušky (oddělte čárkami, např. BH, IGP1, IGP3)"
+                type: string
+              - name: vystavy
+                label: "Výstavy a další úspěchy"
+                type: text
+              - name: fotografie
+                label: "Fotografie psa"
+                type: image
