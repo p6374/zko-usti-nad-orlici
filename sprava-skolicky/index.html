@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#143c30">
+<title>Správa psí školičky | ZKO</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#1b3028;--green:#19583f;--pale:#f4f8f5}
+*{box-sizing:border-box}body{margin:0;background:var(--pale)}header{background:#163b2c;color:white;padding:22px 18px 33px}
+.wrap{max-width:800px;margin:auto;padding:0 16px}header .wrap{padding:0}h1{font-size:1.65rem;margin:8px 0}header p{color:#d5e6db;margin:0}
+main{margin-top:-16px;padding-bottom:50px}.panel{background:white;border:1px solid #dbe5dc;border-radius:17px;padding:20px;margin:0 0 15px;box-shadow:0 5px 22px #1838280d}
+p{line-height:1.5}a{color:#156341}button,.button{background:var(--green);color:white;border:0;border-radius:11px;padding:13px 17px;font-size:1rem;font-weight:650;cursor:pointer;text-decoration:none;display:inline-block;min-height:47px}
+.secondary{background:#e5f0e9;color:#174e38}.danger{background:#fff0ec;color:#983b23}
+.actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center}h2{font-size:1.15rem;margin:2px 0 15px}
+label{display:block;font-weight:650;margin:13px 0 6px}input:not([type=checkbox]):not([type=file]),textarea{width:100%;padding:12px;border:1px solid #b8cbbb;border-radius:9px;background:white;font:inherit}
+textarea{min-height:110px;resize:vertical}input[type=file]{width:100%;font:inherit;margin:7px 0 13px}input[type=checkbox]{transform:scale(1.2);margin-right:9px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 13px}.check{display:flex;align-items:center;margin:15px 0}
+.item{border:1px solid #dce9e1;border-radius:13px;padding:15px;margin:11px 0}.item h3{margin:5px 0;font-size:1.06rem}
+small,.muted{color:#5c7063}.item p{margin:6px 0 13px}.item img{width:100%;max-width:170px;height:100px;object-fit:cover;border-radius:8px}
+#preview{max-width:100%;max-height:180px;object-fit:contain;display:none;border-radius:8px;margin:10px 0}
+#message{padding:12px 14px;background:#f5f0db;border-radius:9px;line-height:1.45;margin:14px 0}
+#editor[hidden],#preview[hidden]{display:none}footer{text-align:center;color:#597363;padding:22px}
+@media(max-width:540px){.grid{grid-template-columns:1fr}.panel{padding:16px}}
+</style></head><body>
+<header><div class="wrap"><small>ZKO Ústí nad Orlicí · oddělená administrace</small><h1>Správa psí školičky</h1>
+<p>Termíny, informace a fotografie. Uložené změny se zveřejňují bez schvalování.</p></div></header>
+<main class="wrap">
+<section class="panel">
+<div class="actions"><button id="new" type="button">+ Přidat termín nebo aktualitu</button>
+<a class="button secondary" href="/skolicka/" target="_blank" rel="noopener">Zobrazit veřejnou školičku ↗</a></div>
+<p id="message" role="status">Ověřuji přístup k administraci…</p>
+</section>
+<section id="editor" class="panel" hidden>
+<h2 id="editorTitle">Nová položka</h2>
+<form id="form">
+<label for="title">Název (povinné)</label><input id="title" maxlength="120" required placeholder="Například: Výcvik štěňat">
+<div class="grid"><div><label for="date">Datum (povinné)</label><input id="date" type="date" required></div>
+<div><label for="time">Čas</label><input id="time" type="time"></div></div>
+<label for="location">Místo</label><input id="location" maxlength="130" placeholder="Cvičiště ZKO">
+<label for="description">Popis / informace</label><textarea id="description" maxlength="1800" placeholder="Pro koho je výcvik určený a co si vzít s sebou…"></textarea>
+<label for="link">Volitelný odkaz (HTTPS)</label><input id="link" type="url" placeholder="https://…">
+<label for="photo">Fotografie (JPG, PNG, WEBP)</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
+<img id="preview" alt="Náhled fotografie">
+<label class="check"><input id="published" type="checkbox" checked> Zveřejnit na webu ihned po uložení</label>
+<div class="actions"><button type="submit" id="save">Uložit a publikovat</button>
+<button class="secondary" type="button" id="cancel">Zrušit</button></div>
+</form></section>
+<section class="panel"><h2>Termíny a aktuality</h2><div id="list"><p class="muted">Načítám záznamy…</p></div></section>
+</main><footer>Úpravy se týkají pouze psí školičky. Ostatní části webu zůstávají oddělené.</footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id), URL_BASE="/sprava-skolicky/api/";
+let items=[],editId=null,currentImage="";
+const message=(txt,bad=false)=>{const el=$("message");el.textContent=txt;el.style.background=bad?"#ffe8e2":"#e5f2e9"};
+async function request(action,options={}) {
+  const response=await fetch(URL_BASE+action,{credentials:"same-origin",cache:"no-store",...options});
+  let data;try{data=await response.json()}catch{throw Error("Server nevrátil očekávaná data. Zkontroluj přihlášení v Cloudflare Access.")}
+  if(!response.ok)throw Error(data.error||"Nepodařilo se spojit se serverem.");
+  return data;
+}
+const element=(tag,text)=>{const el=document.createElement(tag); if(text!==undefined)el.textContent=text;return el};
+function displayList(){
+  const root=$("list");root.replaceChildren();
+  if(!items.length){root.append(element("p","Zatím není přidán žádný termín ani aktualita."));return}
+  [...items].sort((a,b)=>b.date.localeCompare(a.date)).forEach(entry=>{
+    const box=element("article");box.className="item";
+    const state=element("small",entry.published?"● Zveřejněno":"○ Nezveřejněno");
+    const title=element("h3",entry.title);
+    const details=element("p",[entry.date,entry.time,entry.location].filter(Boolean).join(" · "));
+    box.append(state,title,details);
+    if(entry.image){const img=element("img");img.src=entry.image;img.alt=entry.title;img.loading="lazy";box.append(img)}
+    const row=element("div");row.className="actions";
+    const edit=element("button","Upravit");edit.className="secondary";edit.type="button";edit.onclick=()=>openForm(entry);
+    const del=element("button","Smazat");del.className="danger";del.type="button";del.onclick=()=>remove(entry);
+    row.append(edit,del);box.append(row);root.append(box);
+  });
+}
+function openForm(entry=null){
+  editId=entry?.id||null;currentImage=entry?.image||"";
+  $("editorTitle").textContent=entry?"Upravit položku":"Nová položka";
+  for(const id of ["title","time","location","description","link"])$(id).value=entry?.[id]||"";
+  $("date").value=entry?.date||new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  $("published").checked=entry?.published??true;
+  $("photo").value="";
+  $("preview").src=currentImage||"";$("preview").style.display=currentImage?"block":"none";
+  $("editor").hidden=false;$("editor").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function closeForm(){$("editor").hidden=true;editId=null;$("photo").value=""}
+async function uploadImage(file){
+  if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw Error("Fotografie musí být JPG, PNG nebo WEBP.");
+  const bitmap=await createImageBitmap(file);
+  const factor=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));
+  const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(bitmap.width*factor));canvas.height=Math.max(1,Math.round(bitmap.height*factor));
+  canvas.getContext("2d").drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/jpeg",0.83));
+  if(!blob||blob.size>3*1024*1024)throw Error("Fotografie je příliš velká.");
+  const result=await request("image",{method:"POST",headers:{"Content-Type":"image/jpeg"},body:blob});
+  return result.url;
+}
+async function persist(next,msg){
+  const result=await request("data",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:next})});
+  items=result.items;displayList();message(msg);
+}
+async function remove(entry){
+  if(!confirm('Opravdu smazat položku „'+entry.title+'“?'))return;
+  try{await persist(items.filter(x=>x.id!==entry.id),"Položka byla smazána.");}catch(e){message(e.message,true)}
+}
+$("form").addEventListener("submit",async event=>{
+  event.preventDefault();$("save").disabled=true;message("Ukládám změny…");
+  try{
+    let image=currentImage;
+    if($("photo").files[0])image=await uploadImage($("photo").files[0]);
+    const value={id:editId||crypto.randomUUID(),title:$("title").value.trim(),date:$("date").value,
+      time:$("time").value,location:$("location").value.trim(),description:$("description").value.trim(),
+      link:$("link").value.trim(),image,published:$("published").checked};
+    if(!value.title||!value.date)throw Error("Vyplň název a datum.");
+    const next=editId?items.map(x=>x.id===editId?value:x):[...items,value];
+    await persist(next,value.published?"Uloženo. Položka byla zveřejněna; změna se může projevit s krátkým zpožděním.":"Uloženo jako neveřejná položka.");
+    closeForm();
+  }catch(e){message(e.message,true)}finally{$("save").disabled=false}
+});
+$("photo").addEventListener("change",event=>{
+  const file=event.target.files?.[0];
+  if(file){$("preview").src=URL.createObjectURL(file);$("preview").style.display="block";}
+});
+$("new").onclick=()=>openForm();$("cancel").onclick=closeForm;
+(async()=>{try{const data=await request("data");items=data.items||[];displayList();message("Přihlášený správce: "+data.editor+". Můžeš samostatně publikovat.");}
+catch(e){message(e.message+" Přístup zatím není připravený, dokud správce webu nedokončí nastavení Cloudflare Access a úložiště.",true);$("new").disabled=true;$("list").replaceChildren(element("p","Přístup k datům školičky zatím není aktivní."));}})();
+</script></body></html>
