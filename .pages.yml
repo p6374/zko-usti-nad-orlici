@@ -74,6 +74,9 @@ content:
           - name: jmeno
             label: "Jméno a příjmení člena"
             type: string
+          - name: fotografie
+            label: "Profilová fotografie člena"
+            type: image
           - name: psi
             label: "Psi tohoto člena"
             type: object
