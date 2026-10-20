@@ -1,20 +1,28 @@
 {
   "clenove": [
     {
-      "jmeno": "Jaroslav Kovář",
-      "psi": []
+      "jmeno": "Jaroslav Kovář"
     },
     {
-      "jmeno": "Tomáš Šimek",
-      "psi": []
+      "jmeno": "Tomáš Šimek"
     },
     {
-      "jmeno": "Zdeněk Snítil",
-      "psi": []
+      "jmeno": "Zdeněk Snítil"
     },
     {
-      "jmeno": "Karel Vadlejch",
-      "psi": []
+      "jmeno": "Karel Vadlejch"
+    },
+    {
+      "jmeno": "Ludmila Štaudová",
+      "psi": [
+        {
+          "jmeno": "Chelsea Felones",
+          "plemeno": "NO",
+          "zkousky": "BH, IGP1, IGP2, FPR1, IFH1",
+          "vystavy": "6. místo Lukovská stopa, Třebovská stopa 1. místo IGP1, Třebovská speciálka 4.místo, Vysoké Mýto 1.místo IGP1, Choceň 3.místo IGP1",
+          "fotografie": "/media/21a1f8dc-d132-4954-a371-be63725ac7e0.jpg"
+        }
+      ]
     }
   ]
 }
