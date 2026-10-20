@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="cs"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Aktuální termíny a novinky psí školičky ZKO Ústí nad Orlicí.">
+<title>Psí školička – termíny a aktuality | ZKO Ústí nad Orlicí</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#1b3429}
+*{box-sizing:border-box}body{margin:0;background:#f5f8f5}
+header{background:linear-gradient(135deg,#153b2c,#2b6041);color:#fff;padding:48px 20px}
+.wrap{max-width:940px;margin:auto}header small{color:#c6e7d3;letter-spacing:.09em}h1{font-size:clamp(2rem,6vw,3.4rem);margin:11px 0}header p{font-size:1.09rem;max-width:650px;color:#d6ebde;line-height:1.6}
+a{color:#135b3e}header a{color:#f0fff4}
+main{padding:28px 18px 70px}.events{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:17px}
+.card{border-radius:16px;background:#fff;border:1px solid #dde9df;box-shadow:0 3px 18px #1c32250d;overflow:hidden}
+.card img{width:100%;height:200px;object-fit:cover;display:block}.info{padding:22px}
+.date{font-size:.88rem;font-weight:750;color:#176344;text-transform:capitalize}.info h2{font-size:1.25rem;margin:9px 0}
+.info p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.57;color:#4b6255}.loc{font-size:.91rem;color:#607a68}
+.notice{background:#fff;border:1px solid #dde9df;border-radius:14px;padding:22px;line-height:1.6}
+footer{padding:23px;text-align:center;color:#547060}.back{display:inline-block;padding:9px 0}
+</style></head><body>
+<header><div class="wrap"><small>ZKO Ústí nad Orlicí</small><h1>Psí školička</h1>
+<p>Termíny výcviku, setkání a aktuální informace. Novinky zde zveřejňuje pověřený správce školičky.</p>
+<a class="back" href="/">← Zpět na hlavní web ZKO</a></div></header>
+<main class="wrap"><h2>Termíny a aktuality</h2>
+<div id="events" class="events" aria-live="polite"><p>Načítám informace…</p></div>
+</main><footer>Psí školička ZKO Ústí nad Orlicí</footer>
+<script>
+(async()=>{
+  const root=document.getElementById("events");
+  const node=(tag,text)=>{const el=document.createElement(tag);if(text!==undefined)el.textContent=text;return el};
+  try{
+    const res=await fetch("/skolicka/data",{cache:"no-store"});
+    if(!res.ok)throw Error("Server není dostupný.");
+    const data=await res.json();root.replaceChildren();
+    if(!data.ready){const n=node("div","Termíny školičky zatím připravujeme.");n.className="notice";root.append(n);return;}
+    const items=data.items||[];
+    if(!items.length){const n=node("div","Aktuálně nejsou zveřejněny žádné termíny. Nové informace se zde objeví po jejich vložení.");n.className="notice";root.append(n);return;}
+    items.sort((a,b)=>a.date.localeCompare(b.date));
+    for(const event of items){
+      const card=node("article");card.className="card";
+      if(event.image){const img=node("img");img.src=event.image;img.alt=event.title;img.loading="lazy";card.append(img);}
+      const content=node("div");content.className="info";
+      const date=new Date(event.date+"T12:00:00");
+      const dateText=Number.isFinite(date.valueOf())?new Intl.DateTimeFormat("cs-CZ",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(date):event.date;
+      const when=node("div",dateText+(event.time?" · "+event.time:""));when.className="date";
+      content.append(when,node("h2",event.title));
+      if(event.location){const location=node("div",event.location);location.className="loc";content.append(location);}
+      if(event.description)content.append(node("p",event.description));
+      if(event.link){const a=node("a","Další informace ↗");a.href=event.link;a.target="_blank";a.rel="noopener noreferrer";content.append(a);}
+      card.append(content);root.append(card);
+    }
+  }catch{root.replaceChildren(Object.assign(node("p","Informace se nyní nepodařilo načíst. Zkus stránku otevřít později."),{className:"notice"}));}
+})();
+</script></body></html>
