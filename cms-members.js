@@ -34,8 +34,11 @@
           image: safeImage(dog.fotografie)
         };
       }) : [];
-      return {id: slug(name) + "-" + index, name: name, initials: initials, dogs: dogs};
+      return {id: slug(name) + "-" + index, name: name, initials: initials, photo: safeImage(entry.fotografie), dogs: dogs};
     });
+  }
+  function memberAvatar(member) {
+    return member.photo ? '<span class="member-avatar" style="overflow:hidden;display:inline-flex;align-items:center;justify-content:center;"><img src="' + escapeHTML(member.photo) + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></span>' : '<span class="member-avatar">' + escapeHTML(member.initials) + '</span>';
   }
   function renderCards() {
     const grid = document.querySelector("#membersGrid");
@@ -54,8 +57,8 @@
       const dogList = count ? member.dogs.map(function (dog) { return dog.name; }).join(", ") : "Profily psů a výsledky doplníme";
       return '<button type="button" class="member-card ' + (selected === member.id ? 'selected' : '') +
         '" data-member="' + escapeHTML(member.id) + '" aria-pressed="' + (selected === member.id) + '">' +
-        '<span class="member-top"><span class="member-avatar">' + escapeHTML(member.initials) +
-        '</span><span><span class="member-name">' + escapeHTML(member.name) +
+        '<span class="member-top">' + memberAvatar(member) +
+        '<span><span class="member-name">' + escapeHTML(member.name) +
         '</span><small class="member-subtitle">Člen ZKO Ústí nad Orlicí</small></span></span>' +
         '<span class="member-dogs"><span>' + escapeHTML(dogList) + '</span></span>' +
         '<span class="member-bottom"><span>Zobrazit profil</span><span>↗</span></span></button>';
@@ -75,8 +78,8 @@
         '</div>' + awards + '</div></div>';
     }).join("") + '</div>' : '<div class="member-empty-profile"><span class="empty-profile-icon">＋</span><div>' +
       '<strong>Profil připraven k doplnění</strong><p>Psů a výsledků tohoto člena se zatím nikdo nedoplnil.</p></div></div>';
-    detail.innerHTML = '<div class="member-detail-header"><div class="member-avatar">' + escapeHTML(current.initials) +
-      '</div><div><h3>' + escapeHTML(current.name) + '</h3><p>Profil člena ZKO Ústí nad Orlicí</p></div>' +
+    detail.innerHTML = '<div class="member-detail-header">' + memberAvatar(current) +
+      '<div><h3>' + escapeHTML(current.name) + '</h3><p>Profil člena ZKO Ústí nad Orlicí</p></div>' +
       '<span class="detail-meta">PSI A ZKOUŠKY</span></div>' + records;
   }
   async function init() {
