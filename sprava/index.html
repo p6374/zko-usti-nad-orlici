@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#16382d">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Správa webu | ZKO Ústí nad Orlicí</title>
+  <style>
+    :root{color-scheme:light;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--ink:#17352b;--muted:#59675f;--border:#dce6df;--bg:#f4f8f5;--green:#1f6048}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);line-height:1.5}
+    .top{background:#173a2e;color:#fff;padding:20px 20px 36px}
+    .wrap{max-width:680px;margin:auto}
+    .brand{font-size:.8rem;letter-spacing:.14em;font-weight:750;text-transform:uppercase;color:#cce6d6}
+    h1{font-size:clamp(1.8rem,6vw,2.65rem);line-height:1.12;margin:19px 0 12px}
+    .top p{max-width:48ch;color:#e1ece4;margin:0;font-size:1.03rem}
+    main{padding:0 16px 36px;margin-top:-20px}
+    .panel{background:#fff;border:1px solid var(--border);box-shadow:0 6px 20px rgba(11,44,30,.05);border-radius:18px;padding:22px;margin-bottom:14px}
+    h2{margin:0 0 13px;font-size:1.13rem}
+    p{margin:0 0 15px;color:var(--muted)}
+    a{color:var(--green)}
+    .button{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:54px;background:var(--green);border-radius:12px;color:#fff;text-decoration:none;text-align:center;font-size:1.06rem;font-weight:700;padding:14px 18px}
+    .button:hover,.button:focus-visible{background:#154b36}
+    .outline{background:#fff;border:1px solid #bdd2c3;color:var(--green);font-size:.97rem}
+    .outline:hover,.outline:focus-visible{background:#eef6f0}
+    .steps{padding-left:22px;margin:0;color:var(--ink)}
+    .steps li{margin:12px 0;padding-left:3px}
+    .steps span{display:block;color:var(--muted);font-size:.92rem;margin-top:2px}
+    .items{display:grid;grid-template-columns:1fr;gap:10px}
+    .item{background:#f6faf7;border-radius:12px;padding:14px}
+    .item strong{display:block;font-size:.98rem}
+    .item small{color:var(--muted)}
+    .notice{border-left:3px solid #9abb9f;padding:8px 12px;margin-top:16px;font-size:.89rem;color:var(--muted);background:#f6faf7}
+    footer{font-size:.82rem;color:#607267;text-align:center;padding:0 16px 28px}
+    @media(min-width:600px){.top{padding:32px 26px 52px} main{margin-top:-28px}.panel{padding:27px}.items{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <header class="top"><div class="wrap">
+    <div class="brand">ZKO Ústí nad Orlicí</div>
+    <h1>Správa webu z telefonu</h1>
+    <p>Členové, psi, zkoušky, fotografie a texty na jednom místě. Bez úprav HTML a nahrávání ZIP souborů.</p>
+  </div></header>
+  <main class="wrap">
+    <section class="panel">
+      <h2>Otevřít administraci</h2>
+      <p>Editor Pages CMS ukládá změny přímo do propojeného GitHub repozitáře. Web je následně automaticky nasazen přes Cloudflare Pages.</p>
+      <a class="button" href="https://app.pagescms.org/" rel="noopener noreferrer">↗ Otevřít editor webu</a>
+      <div class="notice">Editor vyžaduje přihlášení k účtu GitHub, který má přístup k webu. Heslo se na této stránce nezadává.</div>
+    </section>
+    <section class="panel">
+      <h2>Jak přidat člena a psa</h2>
+      <ol class="steps">
+        <li><b>Přihlas se přes GitHub.</b><span>Při prvním spuštění může být potřeba povolit Pages CMS přístup k repozitáři.</span></li>
+        <li><b>Otevři repozitář p6374/zko-usti-nad-orlici.</b><span>Vyber větev main a položku „Členové a psi“.</span></li>
+        <li><b>Otevři „Seznam členů ZKO“.</b><span>Člena lze přidat do seznamu, pod jeho jménem přidat psa a vyplnit zkoušky.</span></li>
+        <li><b>Vyber fotografii a ulož.</b><span>Fotografii můžeš vybrat z galerie telefonu. Změny se nejprve uloží na GitHub a po nasazení se ukáží na webu.</span></li>
+      </ol>
+    </section>
+    <section class="panel">
+      <h2>Co můžeš upravovat</h2>
+      <div class="items">
+        <div class="item"><strong>🐕 Členové a psi</strong><small>Jména, plemena, zkoušky, úspěchy, fotografie psů</small></div>
+        <div class="item"><strong>📷 Fotografie webu</strong><small>Úvodní snímek, kurzy, galerie, sekce O nás</small></div>
+        <div class="item"><strong>✍️ Texty webu</strong><small>Textové položky, nadpisy a popisy</small></div>
+        <div class="item"><strong>🌐 Veřejný web</strong><small>Prohlédnout si změny po zveřejnění</small></div>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Prohlédnout veřejný web</h2>
+      <a class="button outline" href="https://zko-usti-nad-orlici.pages.dev/" rel="noopener noreferrer">Zobrazit web ZKO ↗</a>
+      <p style="margin:15px 0 0;font-size:.89rem">Tip pro Android: v prohlížeči Chrome otevři nabídku ⋮ a zvol „Přidat na plochu“. Příště otevřeš správu jedním klepnutím.</p>
+    </section>
+  </main>
+  <footer>Správu obsahu zajišťuje Pages CMS · Přihlášení přes GitHub</footer>
+</body>
+</html>
