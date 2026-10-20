@@ -26,7 +26,29 @@
     },
     {
       "jmeno": "Pavel Kubinec",
-      "psi": []
+      "psi": [
+        {
+          "jmeno": "Kim Moravia Boxrott",
+          "plemeno": "rotvajler",
+          "zkousky": "ZM, ZVV1, BH, IFH2, IGP3",
+          "vystavy": "",
+          "fotografie": ""
+        },
+        {
+          "jmeno": "Niko Červený mesiac",
+          "plemeno": "rotvajler",
+          "zkousky": "ZVV1, BH, IFH2, IGP3",
+          "vystavy": "",
+          "fotografie": ""
+        },
+        {
+          "jmeno": "Satiko",
+          "plemeno": "rotvajler",
+          "zkousky": "",
+          "vystavy": "",
+          "fotografie": ""
+        }
+      ]
     }
   ]
 }
