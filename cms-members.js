@@ -80,7 +80,7 @@
       '<strong>Profil připraven k doplnění</strong><p>Psů a výsledků tohoto člena se zatím nikdo nedoplnil.</p></div></div>';
     detail.innerHTML = '<div class="member-detail-header">' + memberAvatar(current) +
       '<div><h3>' + escapeHTML(current.name) + '</h3><p>Profil člena ZKO Ústí nad Orlicí</p></div>' +
-      '<span class="detail-meta">PSI A ZKOUŠKY</span></div>' + records;
+      '<span class="detail-meta">PSI A ZKOUŠKY</span></div>' + (current.photo ? '<figure class="member-profile-photo" style="margin:0;padding:20px;"><img src="' + escapeHTML(current.photo) + '" alt="' + escapeHTML(current.name) + ' se psem" loading="lazy" style="display:block;width:100%;height:480px;object-fit:contain;background:#edf2eb;border-radius:12px;"></figure>' : '') + (current.photo && !current.dogs.length ? '' : records);
   }
   async function init() {
     try {
