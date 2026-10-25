@@ -67,7 +67,7 @@
     const current = subset.find(function (member) { return member.id === selected; }) || subset[0];
     const records = current.dogs.length ? '<div class="dog-records">' + current.dogs.map(function (dog) {
       const photo = dog.image ?
-        '<img src="' + escapeHTML(dog.image) + '" alt="Fotografie psa ' + escapeHTML(dog.name) + '" loading="lazy"/>' :
+        '<img ' + (dog.image === "/media/psi/attila.webp" ? 'style="object-fit:contain;background:#edf2eb;" ' : '') + 'src="' + escapeHTML(dog.image) + '" alt="Fotografie psa ' + escapeHTML(dog.name) + '" loading="lazy"/>' :
         '<span aria-label="Fotografie zatím nebyla přidána" style="display:flex;flex-shrink:0;align-items:center;justify-content:center;min-width:90px;min-height:90px;background:#e7eee7;border-radius:12px;color:#3a5d49;font-size:35px;">🐾</span>';
       const tests = dog.tests.length ? dog.tests.map(function (test) {
         return '<span class="exam-pill">' + escapeHTML(test) + '</span>';
